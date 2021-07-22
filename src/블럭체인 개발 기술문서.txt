@@ -1,0 +1,24 @@
+$ 블럭체인 프로젝트 $ === 투자유치( 핵심 ) === 개인창업 (수익창출)
+
+1) 블럭체인 라이브러 개발
+2) 코어클라이언트 개발 [노드 역할 부여]
+3) 테스트
+
+1) 블럭체인 라이브러리 개발 완료(코어클라인트 기능 구현에 따른 변화적용)
+2) 코어클라이언트 구현
+
+   네트워크 시나리오 작성
+   DNS 시드서버 : 풀노드 주소 제공
+   풀노드       : 블럭 생성 및 블럭및트랜젝션 검증 전체 블럭체인 보유 체굴노드 지갑노드 동기화(블럭체인)
+   SPV노드      : 풀노드 도우미 == 블럭및 트래젝션 증명
+   지갑노드     : 개인거래에 따른 트랜젝션 생성 체인보유
+   체굴노드     : 트랜젝션 관리 및 블럭채굴 후에 풀노드에 통신
+   
+   코어클라이언트 다운로드 및 실행
+17pHP3NvBaVBRpzTZQj2w1tU4kNVNHADMJ
+if addr, ok := conn.RemoteAddr().(*net.TCPAddr); ok {
+    fmt.Println(addr.IP.String())
+}
+
+remoteAddr := conn.RemoteAddr().String()
+localAddr :=conn.LocalAddr().String()
