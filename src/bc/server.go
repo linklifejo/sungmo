@@ -15,12 +15,20 @@ const protocol = "tcp"
 const nodeVersion = 1
 const commandLength = 12
 
+var seedAddress string
+var nodeKind string
 var nodeAddress string
 var miningAddress string
-var knownNodes = []string{"localhost:3000"}
+var knownNodes = []string{
+	"localhost:3000",
+}
 var blocksInTransit = [][]byte{}
 var mempool = make(map[string]Transaction)
 
+type seed struct {
+	AddrFrom string
+	Full     bool
+}
 type addr struct {
 	AddrList []string
 }
@@ -387,6 +395,48 @@ func handleVersion(request []byte, bc *Blockchain) {
 	}
 }
 
+func sendSeed(addr string, full bool) {
+	data := seed{nodeAddress, full}
+	payload := gobEncode(data)
+	request := append(commandToBytes("seed"), payload...)
+
+	sendData(addr, request)
+}
+
+func handleSeed(request []byte) {
+	var buff bytes.Buffer
+	var payload seed
+
+	buff.Write(request[commandLength:])
+	dec := gob.NewDecoder(&buff)
+	err := dec.Decode(&payload)
+	if err != nil {
+		log.Panic(err)
+	}
+	before := knownNodes
+	if payload.Full == true {
+		knownNodes = append(knownNodes, payload.AddrFrom)
+	}
+	nodes := addr{before}
+	load := gobEncode(nodes)
+	req := append(commandToBytes("full"), load...)
+
+	sendData(payload.AddrFrom, req)
+}
+
+func handleFull(request []byte) {
+	var buff bytes.Buffer
+	var payload addr
+
+	buff.Write(request[commandLength:])
+	dec := gob.NewDecoder(&buff)
+	err := dec.Decode(&payload)
+	if err != nil {
+		log.Panic(err)
+	}
+	knownNodes = append(knownNodes, payload.AddrList...)
+}
+
 func handleConnection(conn net.Conn, bc *Blockchain) {
 	request, err := ioutil.ReadAll(conn)
 	if err != nil {
@@ -396,6 +446,11 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 	fmt.Printf("Received %s command\n", command)
 
 	switch command {
+	case "seed":
+		handleSeed(request)
+	case "full":
+		handleFull(request)
+
 	case "addr":
 		handleAddr(request)
 	case "block":
@@ -416,10 +471,47 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 
 	conn.Close()
 }
+func StartNode(nodeID, minerAddress string) {
+	nodeAddress = fmt.Sprintf("localhost:%s", nodeID)
+	seedAddress = fmt.Sprintf("localhost:%s", "3007")
+	miningAddress = minerAddress
+	ln, err := net.Listen(protocol, nodeAddress)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer ln.Close()
+
+	var bc *Blockchain
+	if nodeKind != "seed" {
+		bc = NewBlockchain(nodeID)
+		if nodeKind == "full" {
+			fmt.Println("full here......")
+			sendSeed(seedAddress, true)
+		} else {
+			if nodeKind == "wallet" {
+				fmt.Println("wallet here......")
+			} else {
+				fmt.Println("mine here......")
+
+			}
+			sendSeed(seedAddress, false)
+		}
+		sendVersion(knownNodes[0], bc)
+	}
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			log.Panic(err)
+		}
+
+		go handleConnection(conn, bc)
+	}
+}
 
 // StartServer starts a node
 func StartServer(nodeID, minerAddress string) {
 	nodeAddress = fmt.Sprintf("localhost:%s", nodeID)
+
 	miningAddress = minerAddress
 	ln, err := net.Listen(protocol, nodeAddress)
 	if err != nil {
@@ -438,6 +530,7 @@ func StartServer(nodeID, minerAddress string) {
 		if err != nil {
 			log.Panic(err)
 		}
+
 		go handleConnection(conn, bc)
 	}
 }

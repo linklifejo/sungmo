@@ -234,10 +234,56 @@ func (cli *CLI) WinClient() {
 
 	panel2.Add(walletnode)
 
+	nodecombo := wui.NewComboBox()
+	nodecombo.SetBounds(10, 140, 200, 21)
+	nodecombo.SetItems([]string{"ComboBox"})
+	nodecombo.SetSelectedIndex(0)
+	nodeadd := func(a int) {
+		miningAddress = nodecombo.Text()
+	}
+	nodecombo.SetOnChange(nodeadd)
+	panel2.Add(nodecombo)
+	nodenode := wui.NewLabel()
+	nodenode.SetBounds(10, 120, 100, 13)
+	nodenode.SetText(node09)
+	nodenode.SetAlignment(wui.AlignRight)
+	panel2.Add(nodenode)
+
+	noderad := wui.NewRadioButton()
+	noderad.SetBounds(10, 120, 60, 17)
+	noderad.SetText("mine add")
+	chknode := func(c bool) {
+		if c == true && node09 != "" {
+			walletadd = cc.walletAddresses(node09)
+			nodecombo.SetItems(walletadd)
+			nodenode.SetText(node09)
+
+		}
+	}
+	noderad.SetOnCheck(chknode)
+	panel2.Add(noderad)
+
 	nodebutton := wui.NewButton()
-	nodebutton.SetBounds(10, 131, 85, 25)
+	nodebutton.SetBounds(10, 170, 85, 25)
 	nodebutton.SetText("노드생성")
 	nodeb := func() {
+		switch nodefmw {
+		case "fullnode":
+			fmt.Println("full node" + node09)
+
+			nodeKind = "full"
+			StartNode(node09, " ")
+		case "walletnode":
+			fmt.Println("wallet node" + node09)
+
+			nodeKind = "wallet"
+			StartNode(node09, " ")
+
+		case "minenode":
+			nodeKind = "mine"
+			StartNode(node09, miningAddress)
+
+		}
 		fmt.Println("노드생성")
 	}
 	nodebutton.SetOnClick(nodeb)
@@ -338,7 +384,9 @@ func (cli *CLI) WinClient() {
 	severbutton.SetBounds(9, 131, 85, 25)
 	severbutton.SetText("서버생성")
 	severb := func() {
-		fmt.Println("server")
+		nodeKind = "seed"
+		fmt.Println(node09)
+		StartNode(node09, "")
 	}
 	severbutton.SetOnClick(severb)
 	panel4.Add(severbutton)
