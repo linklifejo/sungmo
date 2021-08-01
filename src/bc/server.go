@@ -16,21 +16,24 @@ const nodeVersion = 1
 const commandLength = 12
 
 var seedAddress string
-var nodeKind string
 var nodeAddress string
 var miningAddress string
-var knownNodes = []string{
-	"localhost:3000",
-}
+var nodeActer string
+
+var knownNodes = []nodeinfo{}
 var blocksInTransit = [][]byte{}
 var mempool = make(map[string]Transaction)
 
+type nodeinfo struct {
+	AddrFrom string
+	Type     string
+}
 type seed struct {
 	AddrFrom string
-	Full     bool
+	Type     string
 }
 type addr struct {
-	AddrList []string
+	AddrList []nodeinfo
 }
 
 type block struct {
@@ -63,6 +66,7 @@ type verzion struct {
 	Version    int
 	BestHeight int
 	AddrFrom   string
+	Type       string
 }
 
 func commandToBytes(command string) []byte {
@@ -86,6 +90,16 @@ func bytesToCommand(bytes []byte) string {
 
 	return fmt.Sprintf("%s", command)
 }
+func BytesLength(bytes []byte) int {
+	var count int
+	count = 0
+	for _, b := range bytes {
+		if b != 0x0 {
+			count = count + 1
+		}
+	}
+	return count
+}
 
 func extractCommand(request []byte) []byte {
 	return request[:commandLength]
@@ -93,13 +107,13 @@ func extractCommand(request []byte) []byte {
 
 func requestBlocks() {
 	for _, node := range knownNodes {
-		sendGetBlocks(node)
+		sendGetBlocks(node.AddrFrom)
 	}
 }
 
 func sendAddr(address string) {
 	nodes := addr{knownNodes}
-	nodes.AddrList = append(nodes.AddrList, nodeAddress)
+	nodes.AddrList = append(nodes.AddrList, nodeinfo{nodeAddress, ""})
 	payload := gobEncode(nodes)
 	request := append(commandToBytes("addr"), payload...)
 
@@ -118,11 +132,11 @@ func sendData(addr string, data []byte) {
 	conn, err := net.Dial(protocol, addr)
 	if err != nil {
 		fmt.Printf("%s is not available\n", addr)
-		var updatedNodes []string
+		var updatedNodes []nodeinfo
 
 		for _, node := range knownNodes {
-			if node != addr {
-				updatedNodes = append(updatedNodes, node)
+			if node.AddrFrom != addr {
+				updatedNodes = append(updatedNodes, nodeinfo{node.AddrFrom, nodeActer})
 			}
 		}
 
@@ -170,7 +184,7 @@ func sendTx(addr string, tnx *Transaction) {
 
 func sendVersion(addr string, bc *Blockchain) {
 	bestHeight := bc.GetBestHeight()
-	payload := gobEncode(verzion{nodeVersion, bestHeight, nodeAddress})
+	payload := gobEncode(verzion{nodeVersion, bestHeight, nodeAddress, nodeActer})
 
 	request := append(commandToBytes("version"), payload...)
 
@@ -206,16 +220,12 @@ func handleBlock(request []byte, bc *Blockchain) {
 
 	blockData := payload.Block
 	block := DeserializeBlock(blockData)
-
 	fmt.Println("Recevied a new block!")
 	bc.AddBlock(block)
-
 	fmt.Printf("Added block %x\n", block.Hash)
-
 	if len(blocksInTransit) > 0 {
 		blockHash := blocksInTransit[0]
 		sendGetData(payload.AddrFrom, "block", blockHash)
-
 		blocksInTransit = blocksInTransit[1:]
 	} else {
 		UTXOSet := UTXOSet{bc}
@@ -238,7 +248,6 @@ func handleInv(request []byte, bc *Blockchain) {
 
 	if payload.Type == "block" {
 		blocksInTransit = payload.Items
-
 		blockHash := payload.Items[0]
 		sendGetData(payload.AddrFrom, "block", blockHash)
 
@@ -253,10 +262,10 @@ func handleInv(request []byte, bc *Blockchain) {
 
 	if payload.Type == "tx" {
 		txID := payload.Items[0]
-
 		if mempool[hex.EncodeToString(txID)].ID == nil {
 			sendGetData(payload.AddrFrom, "tx", txID)
 		}
+
 	}
 }
 
@@ -291,7 +300,6 @@ func handleGetData(request []byte, bc *Blockchain) {
 		if err != nil {
 			return
 		}
-
 		sendBlock(payload.AddrFrom, &block)
 	}
 
@@ -319,12 +327,13 @@ func handleTx(request []byte, bc *Blockchain) {
 	tx := DeserializeTransaction(txData)
 	mempool[hex.EncodeToString(tx.ID)] = tx
 
-	if nodeAddress == knownNodes[0] {
+	if nodeActer == "full" {
 		for _, node := range knownNodes {
-			if node != nodeAddress && node != payload.AddFrom {
-				sendInv(node, "tx", [][]byte{tx.ID})
+			if node.Type == "mine" {
+				sendInv(node.AddrFrom, "tx", [][]byte{tx.ID})
 			}
 		}
+
 	} else {
 		if len(mempool) >= 2 && len(miningAddress) > 0 {
 		MineTransactions:
@@ -355,10 +364,11 @@ func handleTx(request []byte, bc *Blockchain) {
 				txID := hex.EncodeToString(tx.ID)
 				delete(mempool, txID)
 			}
-
+			fmt.Println("block maid and pool delete..")
 			for _, node := range knownNodes {
-				if node != nodeAddress {
-					sendInv(node, "block", [][]byte{newBlock.Hash})
+				if node.Type == "full" {
+					fmt.Printf(" New block sends to address: %s, Acter: %s\n", node.AddrFrom, node.Type)
+					sendInv(node.AddrFrom, "block", [][]byte{newBlock.Hash})
 				}
 			}
 
@@ -388,15 +398,14 @@ func handleVersion(request []byte, bc *Blockchain) {
 	} else if myBestHeight > foreignerBestHeight {
 		sendVersion(payload.AddrFrom, bc)
 	}
-
 	// sendAddr(payload.AddrFrom)
 	if !nodeIsKnown(payload.AddrFrom) {
-		knownNodes = append(knownNodes, payload.AddrFrom)
+		knownNodes = append(knownNodes, nodeinfo{payload.AddrFrom, payload.Type})
 	}
 }
 
-func sendSeed(addr string, full bool) {
-	data := seed{nodeAddress, full}
+func sendSeed(addr string, nodeType string) {
+	data := seed{nodeAddress, nodeType}
 	payload := gobEncode(data)
 	request := append(commandToBytes("seed"), payload...)
 
@@ -413,28 +422,40 @@ func handleSeed(request []byte) {
 	if err != nil {
 		log.Panic(err)
 	}
-	before := knownNodes
-	if payload.Full == true {
-		knownNodes = append(knownNodes, payload.AddrFrom)
-	}
-	nodes := addr{before}
-	load := gobEncode(nodes)
-	req := append(commandToBytes("full"), load...)
 
+	nodes := addr{knownNodes}
+	if payload.Type == "full" {
+		if !nodeIsKnown(payload.AddrFrom) {
+			knownNodes = append(knownNodes, nodeinfo{payload.AddrFrom, payload.Type})
+		}
+	}
+
+	load := gobEncode(nodes)
+	req := append(commandToBytes("nodes"), load...)
 	sendData(payload.AddrFrom, req)
 }
 
-func handleFull(request []byte) {
+func handleNodes(request []byte, bc *Blockchain) {
 	var buff bytes.Buffer
 	var payload addr
-
 	buff.Write(request[commandLength:])
 	dec := gob.NewDecoder(&buff)
 	err := dec.Decode(&payload)
 	if err != nil {
 		log.Panic(err)
 	}
-	knownNodes = append(knownNodes, payload.AddrList...)
+	for _, v := range payload.AddrList {
+		if !nodeIsKnown(v.AddrFrom) && v.AddrFrom != nodeAddress {
+			knownNodes = append(knownNodes, nodeinfo{v.AddrFrom, v.Type})
+		}
+	}
+
+	if len(knownNodes) > 0 {
+		for _, v := range knownNodes {
+			fmt.Printf("Hi~~hand shaking....: %s \n", v.AddrFrom)
+			sendVersion(v.AddrFrom, bc)
+		}
+	}
 }
 
 func handleConnection(conn net.Conn, bc *Blockchain) {
@@ -448,8 +469,8 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 	switch command {
 	case "seed":
 		handleSeed(request)
-	case "full":
-		handleFull(request)
+	case "nodes":
+		handleNodes(request, bc)
 
 	case "addr":
 		handleAddr(request)
@@ -471,7 +492,8 @@ func handleConnection(conn net.Conn, bc *Blockchain) {
 
 	conn.Close()
 }
-func StartNode(nodeID, minerAddress string) {
+func StartNode(nodeID, nodeAct, minerAddress string) {
+	nodeActer = nodeAct
 	nodeAddress = fmt.Sprintf("localhost:%s", nodeID)
 	seedAddress = fmt.Sprintf("localhost:%s", "3007")
 	miningAddress = minerAddress
@@ -482,28 +504,15 @@ func StartNode(nodeID, minerAddress string) {
 	defer ln.Close()
 
 	var bc *Blockchain
-	if nodeKind != "seed" {
+	if nodeAddress != seedAddress {
 		bc = NewBlockchain(nodeID)
-		if nodeKind == "full" {
-			fmt.Println("full here......")
-			sendSeed(seedAddress, true)
-		} else {
-			if nodeKind == "wallet" {
-				fmt.Println("wallet here......")
-			} else {
-				fmt.Println("mine here......")
-
-			}
-			sendSeed(seedAddress, false)
-		}
-		sendVersion(knownNodes[0], bc)
+		sendSeed(seedAddress, nodeActer)
 	}
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
 			log.Panic(err)
 		}
-
 		go handleConnection(conn, bc)
 	}
 }
@@ -521,8 +530,8 @@ func StartServer(nodeID, minerAddress string) {
 
 	bc := NewBlockchain(nodeID)
 
-	if nodeAddress != knownNodes[0] {
-		sendVersion(knownNodes[0], bc)
+	if nodeAddress != knownNodes[0].AddrFrom {
+		sendVersion(knownNodes[0].AddrFrom, bc)
 	}
 
 	for {
@@ -549,7 +558,7 @@ func gobEncode(data interface{}) []byte {
 
 func nodeIsKnown(addr string) bool {
 	for _, node := range knownNodes {
-		if node == addr {
+		if node.AddrFrom == addr {
 			return true
 		}
 	}

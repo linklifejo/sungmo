@@ -15,10 +15,10 @@ type BlockchainIterator struct {
 // Next returns next block starting from the tip
 func (i *BlockchainIterator) Next() *Block {
 	var block *Block
-
 	err := i.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		encodedBlock := b.Get(i.currentHash)
+
 		block = DeserializeBlock(encodedBlock)
 
 		return nil

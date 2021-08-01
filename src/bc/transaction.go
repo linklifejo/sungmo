@@ -201,7 +201,8 @@ func NewUTXOTransaction(wallet *Wallet, to string, amount int, UTXOSet *UTXOSet)
 	acc, validOutputs := UTXOSet.FindSpendableOutputs(pubKeyHash, amount)
 
 	if acc < amount {
-		log.Panic("ERROR: Not enough funds")
+		log.Println("Sorry~~ Not enough funds")
+		return nil
 	}
 
 	// Build a list of inputs
@@ -226,6 +227,7 @@ func NewUTXOTransaction(wallet *Wallet, to string, amount int, UTXOSet *UTXOSet)
 
 	tx := Transaction{nil, inputs, outputs}
 	tx.ID = tx.Hash()
+
 	UTXOSet.Blockchain.SignTransaction(&tx, wallet.PrivateKey)
 
 	return &tx
@@ -234,11 +236,11 @@ func NewUTXOTransaction(wallet *Wallet, to string, amount int, UTXOSet *UTXOSet)
 // DeserializeTransaction deserializes a transaction
 func DeserializeTransaction(data []byte) Transaction {
 	var transaction Transaction
-
+	gob.Register(Transaction{})
 	decoder := gob.NewDecoder(bytes.NewReader(data))
 	err := decoder.Decode(&transaction)
 	if err != nil {
-		log.Panic(err)
+		log.Printf("failed to decode transaction; err: %v", err)
 	}
 
 	return transaction

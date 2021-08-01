@@ -22,7 +22,6 @@ func (cli *CLI) send(from, to string, amount int, nodeID string, mineNow bool) {
 		log.Panic(err)
 	}
 	wallet := wallets.GetWallet(from)
-
 	tx := NewUTXOTransaction(&wallet, to, amount, &UTXOSet)
 
 	if mineNow {
@@ -32,8 +31,9 @@ func (cli *CLI) send(from, to string, amount int, nodeID string, mineNow bool) {
 		newBlock := bc.MineBlock(txs)
 		UTXOSet.Update(newBlock)
 	} else {
-		sendTx(knownNodes[0], tx)
+		if len(knownNodes) > 0 {
+			fmt.Println("Be Sent : %s", knownNodes[0].AddrFrom)
+			sendTx(knownNodes[0].AddrFrom, tx)
+		}
 	}
-
-	fmt.Println("Success!")
 }

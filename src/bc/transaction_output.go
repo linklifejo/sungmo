@@ -53,11 +53,11 @@ func (outs TXOutputs) Serialize() []byte {
 // DeserializeOutputs deserializes TXOutputs
 func DeserializeOutputs(data []byte) TXOutputs {
 	var outputs TXOutputs
-
+	gob.Register(TXOutputs{})
 	dec := gob.NewDecoder(bytes.NewReader(data))
 	err := dec.Decode(&outputs)
 	if err != nil {
-		log.Panic(err)
+		log.Printf("failed to decode TXOutputs; err: %v", err)
 	}
 
 	return outputs

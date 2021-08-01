@@ -149,8 +149,9 @@ func (bc *Blockchain) FindTransaction(ID []byte) (Transaction, error) {
 			break
 		}
 	}
+	return Transaction{}, nil
 
-	return Transaction{}, errors.New("Transaction is not found")
+	//	return Transaction{}, errors.New("Transaction is not found")
 }
 
 // FindUTXO finds all unspent transaction outputs and returns transactions with spent outputs removed
@@ -207,7 +208,6 @@ func (bc *Blockchain) Iterator() *BlockchainIterator {
 // GetBestHeight returns the height of the latest block
 func (bc *Blockchain) GetBestHeight() int {
 	var lastBlock Block
-
 	err := bc.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		lastHash := b.Get([]byte("l"))
@@ -293,14 +293,13 @@ func (bc *Blockchain) MineBlock(transactions []*Transaction) *Block {
 	}
 
 	newBlock := NewBlock(transactions, lastHash, lastHeight+1)
-
 	err = bc.db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		err := b.Put(newBlock.Hash, newBlock.Serialize())
+
 		if err != nil {
 			log.Panic(err)
 		}
-
 		err = b.Put([]byte("l"), newBlock.Hash)
 		if err != nil {
 			log.Panic(err)

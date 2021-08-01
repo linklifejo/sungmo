@@ -98,15 +98,15 @@ func (u UTXOSet) CountTransactions() int {
 // Reindex rebuilds the UTXO set
 func (u UTXOSet) Reindex() {
 	db := u.Blockchain.db
-	bucketName := []byte(utxoBucket)
+	bucketName := utxoBucket
 
 	err := db.Update(func(tx *bolt.Tx) error {
-		err := tx.DeleteBucket(bucketName)
+		err := tx.DeleteBucket([]byte(bucketName))
 		if err != nil && err != bolt.ErrBucketNotFound {
 			log.Panic(err)
 		}
 
-		_, err = tx.CreateBucket(bucketName)
+		_, err = tx.CreateBucket([]byte(bucketName))
 		if err != nil {
 			log.Panic(err)
 		}
@@ -120,7 +120,7 @@ func (u UTXOSet) Reindex() {
 	UTXO := u.Blockchain.FindUTXO()
 
 	err = db.Update(func(tx *bolt.Tx) error {
-		b := tx.Bucket(bucketName)
+		b := tx.Bucket([]byte(bucketName))
 
 		for txID, outs := range UTXO {
 			key, err := hex.DecodeString(txID)
