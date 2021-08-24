@@ -1,0 +1,722 @@
+[
+    {
+        "label": "MyWindow",
+        "importPath": "pytrader",
+        "description": "pytrader",
+        "isExtraImport": true,
+        "detail": "pytrader",
+        "documentation": {}
+    },
+    {
+        "label": "MyWindow",
+        "importPath": "pytrader",
+        "description": "pytrader",
+        "isExtraImport": true,
+        "detail": "pytrader",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "DataFrame",
+        "importPath": "pandas",
+        "description": "pandas",
+        "isExtraImport": true,
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "read_sql",
+        "importPath": "pandas",
+        "description": "pandas",
+        "isExtraImport": true,
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "concat",
+        "importPath": "pandas",
+        "description": "pandas",
+        "isExtraImport": true,
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "QApplication",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QApplication",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QApplication",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QApplication",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QMainWindow",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QMessageBox",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QTableWidget",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "QTableWidgetItem",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Thread",
+        "importPath": "threading",
+        "description": "threading",
+        "isExtraImport": true,
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "Condition",
+        "importPath": "threading",
+        "description": "threading",
+        "isExtraImport": true,
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
+        "label": "pyqtSignal",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "QEventLoop",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "Qt",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "QTimer",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "QTime",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "QThread",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "pyqtSignal",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "QEventLoop",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "sqlite3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sqlite3",
+        "description": "sqlite3",
+        "detail": "sqlite3",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "deepcopy",
+        "importPath": "copy",
+        "description": "copy",
+        "isExtraImport": true,
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "relativedelta",
+        "importPath": "dateutil.relativedelta",
+        "description": "dateutil.relativedelta",
+        "isExtraImport": true,
+        "detail": "dateutil.relativedelta",
+        "documentation": {}
+    },
+    {
+        "label": "relativedelta",
+        "importPath": "dateutil.relativedelta",
+        "description": "dateutil.relativedelta",
+        "isExtraImport": true,
+        "detail": "dateutil.relativedelta",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "BeautifulSoup",
+        "importPath": "bs4",
+        "description": "bs4",
+        "isExtraImport": true,
+        "detail": "bs4",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "database",
+        "importPath": "database",
+        "description": "database",
+        "isExtraImport": true,
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "database",
+        "importPath": "database",
+        "description": "database",
+        "isExtraImport": true,
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "logging",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging",
+        "description": "logging",
+        "detail": "logging",
+        "documentation": {}
+    },
+    {
+        "label": "logging.config",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "logging.config",
+        "description": "logging.config",
+        "detail": "logging.config",
+        "documentation": {}
+    },
+    {
+        "label": "QAxWidget",
+        "importPath": "PyQt5.QAxContainer",
+        "description": "PyQt5.QAxContainer",
+        "isExtraImport": true,
+        "detail": "PyQt5.QAxContainer",
+        "documentation": {}
+    },
+    {
+        "label": "Write_db",
+        "importPath": "write_db",
+        "description": "write_db",
+        "isExtraImport": true,
+        "detail": "write_db",
+        "documentation": {}
+    },
+    {
+        "label": "Write_db",
+        "importPath": "write_db",
+        "description": "write_db",
+        "isExtraImport": true,
+        "detail": "write_db",
+        "documentation": {}
+    },
+    {
+        "label": "application",
+        "importPath": "pywinauto",
+        "description": "pywinauto",
+        "isExtraImport": true,
+        "detail": "pywinauto",
+        "documentation": {}
+    },
+    {
+        "label": "timings",
+        "importPath": "pywinauto",
+        "description": "pywinauto",
+        "isExtraImport": true,
+        "detail": "pywinauto",
+        "documentation": {}
+    },
+    {
+        "label": "Sell",
+        "importPath": "sell",
+        "description": "sell",
+        "isExtraImport": true,
+        "detail": "sell",
+        "documentation": {}
+    },
+    {
+        "label": "Buy",
+        "importPath": "buy",
+        "description": "buy",
+        "isExtraImport": true,
+        "detail": "buy",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "sys,",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys.",
+        "description": "sys.",
+        "detail": "sys.",
+        "documentation": {}
+    },
+    {
+        "label": "uic",
+        "importPath": "PyQt5",
+        "description": "PyQt5",
+        "isExtraImport": true,
+        "detail": "PyQt5",
+        "documentation": {}
+    },
+    {
+        "label": "Kiwoom",
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "isExtraImport": true,
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterTypeError",
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "isExtraImport": true,
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterValueError",
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "isExtraImport": true,
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "KiwoomProcessingError",
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "isExtraImport": true,
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "KiwoomConnectError",
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "isExtraImport": true,
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "Order",
+        "importPath": "order",
+        "description": "order",
+        "isExtraImport": true,
+        "detail": "order",
+        "documentation": {}
+    },
+    {
+        "label": "Order",
+        "importPath": "order",
+        "description": "order",
+        "isExtraImport": true,
+        "detail": "order",
+        "documentation": {}
+    },
+    {
+        "label": "get_data",
+        "importPath": "get_data",
+        "description": "get_data",
+        "isExtraImport": true,
+        "detail": "get_data",
+        "documentation": {}
+    },
+    {
+        "label": "pause",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pause",
+        "description": "pause",
+        "detail": "pause",
+        "documentation": {}
+    },
+    {
+        "label": "Buy",
+        "kind": 6,
+        "importPath": "buy",
+        "description": "buy",
+        "peekOfCode": "class Buy(Thread, MyWindow):\n    tx_signal = pyqtSignal(str)\n    rx_signal = pyqtSignal(str)\n    def __init__(self, user_param, cond):           \n        Thread.__init__(self)\n        MyWindow.__init__(self, user_param, cond)\n        self.user_param = user_param\n        self.rx_signal.connect(self.exec_order)\n    def exec_order(self, command):\n        if ',' in command:",
+        "detail": "buy",
+        "documentation": {}
+    },
+    {
+        "label": "database",
+        "kind": 6,
+        "importPath": "database",
+        "description": "database",
+        "peekOfCode": "class database:\n    def load_tableList(self, con):\n        cursor = con.cursor()\n        cursor.execute(\"SELECT name FROM sqlite_master WHERE type='table';\")\n        tables = cursor.fetchall()\n        df_list = []\n        for tname in tables:\n            df_list.append(tname[0])\n        return df_list",
+        "detail": "database",
+        "documentation": {}
+    },
+    {
+        "label": "get_data",
+        "kind": 6,
+        "importPath": "get_data",
+        "description": "get_data",
+        "peekOfCode": "class get_data:\n    def __init__(self, root):\n        self.root = root\n    def get_stock_list(self):\n        market = ['stockMkt', 'kosadqMkt']\n        url = 'https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType='\n        dfs = []\n        for m in market:\n            df = pd.read_html(url + m, header=0)[0]\n            if m == 'stockMkt':",
+        "detail": "get_data",
+        "documentation": {}
+    },
+    {
+        "label": "Kiwoom",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class Kiwoom(QAxWidget, Write_db):\n    def __init__(self, user_param, cond):\n        super().__init__()\n        self.cond = cond\n        self.setControl(\"KHOPENAPI.KHOpenAPICtrl.1\")\n        # Loop 변수\n        # 비동기 방식으로 동작되는 이벤트를 동기화(순서대로 동작) 시킬 때\n        self.loginLoop = None\n        self.requestLoop = None\n        self.orderLoop = None",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterTypeError",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class ParameterTypeError(Exception):\n    \"\"\" 파라미터 타입이 일치하지 않을 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"파라미터로 사용할 수 없는 값 입니다.\"):\n        self.msg = msg\nclass ParameterTypeError(Exception):\n    \"\"\" 파라미터 타입이 일치하지 않을 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"파라미터 타입이 일치하지 않습니다.\"):\n        self.msg = msg\n    def __str__(self):\n        return self.msg",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterTypeError",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class ParameterTypeError(Exception):\n    \"\"\" 파라미터 타입이 일치하지 않을 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"파라미터 타입이 일치하지 않습니다.\"):\n        self.msg = msg\n    def __str__(self):\n        return self.msg\nclass ParameterValueError(Exception):\n    \"\"\" 파라미터로 사용할 수 없는 값을 사용할 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"파라미터로 사용할 수 없는 값 입니다.\"):\n        self.msg = msg",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ParameterValueError",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class ParameterValueError(Exception):\n    \"\"\" 파라미터로 사용할 수 없는 값을 사용할 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"파라미터로 사용할 수 없는 값 입니다.\"):\n        self.msg = msg\n    def __str__(self):\n        return self.msg\nclass KiwoomProcessingError(Exception):\n    \"\"\" 키움에서 처리실패에 관련된 리턴코드를 받았을 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"처리 실패\"):\n        self.msg = msg",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "KiwoomProcessingError",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class KiwoomProcessingError(Exception):\n    \"\"\" 키움에서 처리실패에 관련된 리턴코드를 받았을 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"처리 실패\"):\n        self.msg = msg\n    def __str__(self):\n        return self.msg\n    def __repr__(self):\n        return self.msg\nclass KiwoomConnectError(Exception):\n    \"\"\" 키움서버에 로그인 상태가 아닐 경우 발생하는 예외 \"\"\"",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "KiwoomConnectError",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class KiwoomConnectError(Exception):\n    \"\"\" 키움서버에 로그인 상태가 아닐 경우 발생하는 예외 \"\"\"\n    def __init__(self, msg=\"로그인 여부를 확인하십시오\"):\n        self.msg = msg\n    def __str__(self):\n        return self.msg\nclass ReturnCode(object):\n    \"\"\" 키움 OpenApi+ 함수들이 반환하는 값 \"\"\"\n    OP_ERR_NONE = 0 # 정상처리\n    OP_ERR_FAIL = -10   # 실패",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "ReturnCode",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class ReturnCode(object):\n    \"\"\" 키움 OpenApi+ 함수들이 반환하는 값 \"\"\"\n    OP_ERR_NONE = 0 # 정상처리\n    OP_ERR_FAIL = -10   # 실패\n    OP_ERR_LOGIN = -100 # 사용자정보교환실패\n    OP_ERR_CONNECT = -101   # 서버접속실패\n    OP_ERR_VERSION = -102   # 버전처리실패\n    OP_ERR_FIREWALL = -103  # 개인방화벽실패\n    OP_ERR_MEMORY = -104    # 메모리보호실패\n    OP_ERR_INPUT = -105 # 함수입력값오류",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "FidList",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class FidList(object):\n    \"\"\" receiveChejanData() 이벤트 메서드로 전달되는 FID 목록 \"\"\"\n    CHEJAN = {\n        9201: '계좌번호',\n        9203: '주문번호',\n        9205: '관리자사번',\n        9001: '종목코드',\n        912: '주문업무분류',\n        913: '주문상태',\n        302: '종목명',",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "RealType",
+        "kind": 6,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "class RealType(object):\n    REALTYPE = {\n        '주식시세': {\n            10: '현재가',\n            11: '전일대비',\n            12: '등락율',\n            27: '최우선매도호가',\n            28: '최우선매수호가',\n            13: '누적거래량',\n            14: '누적거래대금',",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "account",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "account = []\nwith open(\"C:\\\\Users\\\\seoga\\\\PycharmProjects\\\\PyTrader\\\\account.txt\", 'r') as f:\n    account = f.readlines()\n# 번개2 실행 및 로그인\napp = application.Application()\napp.start(\"C:\\Kiwoom\\KiwoomFlash2\\khministarter.exe\")\ntitle = \"번개 Login\"\ndlg = timings.WaitUntilPasses(20, 0.5, lambda: app.window_(title=title))\nidForm = dlg.Edit0\nidForm.SetFocus()",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "app = application.Application()\napp.start(\"C:\\Kiwoom\\KiwoomFlash2\\khministarter.exe\")\ntitle = \"번개 Login\"\ndlg = timings.WaitUntilPasses(20, 0.5, lambda: app.window_(title=title))\nidForm = dlg.Edit0\nidForm.SetFocus()\nidForm.TypeKeys(account[0])\npassForm = dlg.Edit2\npassForm.SetFocus()\npassForm.TypeKeys(account[1])",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "title",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "title = \"번개 Login\"\ndlg = timings.WaitUntilPasses(20, 0.5, lambda: app.window_(title=title))\nidForm = dlg.Edit0\nidForm.SetFocus()\nidForm.TypeKeys(account[0])\npassForm = dlg.Edit2\npassForm.SetFocus()\npassForm.TypeKeys(account[1])\ncertForm = dlg.Edit3\ncertForm.SetFocus()",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "dlg",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "dlg = timings.WaitUntilPasses(20, 0.5, lambda: app.window_(title=title))\nidForm = dlg.Edit0\nidForm.SetFocus()\nidForm.TypeKeys(account[0])\npassForm = dlg.Edit2\npassForm.SetFocus()\npassForm.TypeKeys(account[1])\ncertForm = dlg.Edit3\ncertForm.SetFocus()\ncertForm.TypeKeys(account[2])",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "idForm",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "idForm = dlg.Edit0\nidForm.SetFocus()\nidForm.TypeKeys(account[0])\npassForm = dlg.Edit2\npassForm.SetFocus()\npassForm.TypeKeys(account[1])\ncertForm = dlg.Edit3\ncertForm.SetFocus()\ncertForm.TypeKeys(account[2])\nloginBtn = dlg.Button0",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "passForm",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "passForm = dlg.Edit2\npassForm.SetFocus()\npassForm.TypeKeys(account[1])\ncertForm = dlg.Edit3\ncertForm.SetFocus()\ncertForm.TypeKeys(account[2])\nloginBtn = dlg.Button0\nloginBtn.Click()\n# 업데이트가 완료될 때 까지 대기\nwhile True:",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "certForm",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "certForm = dlg.Edit3\ncertForm.SetFocus()\ncertForm.TypeKeys(account[2])\nloginBtn = dlg.Button0\nloginBtn.Click()\n# 업데이트가 완료될 때 까지 대기\nwhile True:\n    time.sleep(5)\n    with os.popen('tasklist /FI \"IMAGENAME eq khmini.exe\"') as f:\n        lines = f.readlines()",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "loginBtn",
+        "kind": 5,
+        "importPath": "kiwoomauto",
+        "description": "kiwoomauto",
+        "peekOfCode": "loginBtn = dlg.Button0\nloginBtn.Click()\n# 업데이트가 완료될 때 까지 대기\nwhile True:\n    time.sleep(5)\n    with os.popen('tasklist /FI \"IMAGENAME eq khmini.exe\"') as f:\n        lines = f.readlines()\n        if len(lines) >= 3:\n            break\n# 번개2 종료",
+        "detail": "kiwoomauto",
+        "documentation": {}
+    },
+    {
+        "label": "Main",
+        "kind": 6,
+        "importPath": "Main",
+        "description": "Main",
+        "peekOfCode": "class Main:\n    def __init__(self):\n        self.threads = {}\n    def load_param(self):\n        with open(\"parameter.json\") as json_file:\n            return json.load(json_file)\n    def connect_order(self, command):\n        from_signal, to_signal, func = command.split(';')\n        self.threads[to_signal].rx_signal.emit(func)\n    def run(self):",
+        "detail": "Main",
+        "documentation": {}
+    },
+    {
+        "label": "Order",
+        "kind": 6,
+        "importPath": "order",
+        "description": "order",
+        "peekOfCode": "class Order(Write_db):\n    def __init__(self):\n        self.columns = ['tid', 'code', 'name', 'id', 'qty', 'cum_qty', 'buy_price', 'buy_datetime', 'sell_price',\n                        'sell_datetime', 'stop_price', 'due_date', 'profit', 'trade', 'state', 'algorithm']\n        self.hogaTypeTable = {\"지정가\": \"00\", \"시장가\": \"03\"}\n    @staticmethod\n    def roundTime(dt=None, roundTo=60, round='up'):\n        \"\"\"Round a datetime object to any time lapse in seconds\n        dt : datetime.datetime object, default now.\n        roundTo : Closest number of seconds to round to, default 1 minute.",
+        "detail": "order",
+        "documentation": {}
+    },
+    {
+        "label": "MyWindow",
+        "kind": 6,
+        "importPath": "pytrader",
+        "description": "pytrader",
+        "peekOfCode": "class MyWindow(QMainWindow, ui, Order):\n    def __init__(self, user_param, cond):\n        super().__init__()\n        self.setupUi(self)\n        self.show()\n        self.user_param = user_param\n        self.kiwoom = Kiwoom(self.user_param, cond)\n        self.kiwoom.commConnect()\n        self.kiwoom.setAccount()\n        self.server = self.kiwoom.getLoginInfo(\"GetServerGubun\")",
+        "detail": "pytrader",
+        "documentation": {}
+    },
+    {
+        "label": "ui",
+        "kind": 5,
+        "importPath": "pytrader",
+        "description": "pytrader",
+        "peekOfCode": "ui = uic.loadUiType(\"pytrader.ui\")[0]\nclass MyWindow(QMainWindow, ui, Order):\n    def __init__(self, user_param, cond):\n        super().__init__()\n        self.setupUi(self)\n        self.show()\n        self.user_param = user_param\n        self.kiwoom = Kiwoom(self.user_param, cond)\n        self.kiwoom.commConnect()\n        self.kiwoom.setAccount()",
+        "detail": "pytrader",
+        "documentation": {}
+    },
+    {
+        "label": "Sell",
+        "kind": 6,
+        "importPath": "sell",
+        "description": "sell",
+        "peekOfCode": "class Sell(QThread):\n    tx_signal = pyqtSignal(str)\n    rx_signal = pyqtSignal(str)\n    def __init__(self, user_param, cond):\n        super(Sell, self).__init__()\n        self.user_param = user_param\n        self.cond = cond\n        self.rx_signal.connect(self.exec_order)\n    def __set_time_format(self, date, time):\n        return datetime.datetime.strptime(date + ' ' + time, \"%Y-%m-%d %H:%M:%S\")",
+        "detail": "sell",
+        "documentation": {}
+    },
+    {
+        "label": "sim_ma5",
+        "kind": 6,
+        "importPath": "sim_ma5",
+        "description": "sim_ma5",
+        "peekOfCode": "class sim_ma5:\n    def __init__(self, root):\n        self.root = root\n    def run(self):\n        con = sqlite3.connect(os.path.join(self.root, 'database', 'day_candle.db'))\n        db = database()\n        codeList = db.load_tableList(con)\n        result = []\n        for code in codeList:\n            df = pd.read_sql(\"SELECT * FROM '{}'\".format(code), con, index_col='Date')",
+        "detail": "sim_ma5",
+        "documentation": {}
+    },
+    {
+        "label": "Write_db",
+        "kind": 6,
+        "importPath": "write_db",
+        "description": "write_db",
+        "peekOfCode": "class Write_db:\n    def append_db(self, con, tname, items):\n        self.__dict__['cond'].acquire()\n        cursor = con.cursor()\n        sql = \"INSERT INTO '{}'\".format(tname) + 'VALUES(' + ','.join(['?'] * len(items)) + ')'\n        print(sql)\n        cursor.execute(sql, items)\n        con.commit()\n        self.__dict__['cond'].notify()\n        self.__dict__['cond'].release()",
+        "detail": "write_db",
+        "documentation": {}
+    }
+]

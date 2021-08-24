@@ -61,9 +61,11 @@ func (b *Block) Serialize() []byte {
 }
 
 // DeserializeBlock deserializes a block
+
 func DeserializeBlock(d []byte) *Block {
 	var block Block
 	gob.Register(Block{})
+
 	decoder := gob.NewDecoder(bytes.NewReader(d))
 	err := decoder.Decode(&block)
 	if err != nil {

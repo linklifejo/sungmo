@@ -210,7 +210,6 @@ func handleAddr(request []byte) {
 func handleBlock(request []byte, bc *Blockchain) {
 	var buff bytes.Buffer
 	var payload block
-
 	buff.Write(request[commandLength:])
 	dec := gob.NewDecoder(&buff)
 	err := dec.Decode(&payload)
