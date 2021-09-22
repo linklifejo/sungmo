@@ -16,7 +16,7 @@ class get_data:
         self.root = root
 
     def get_stock_list(self):
-        market = ['stockMkt', 'kosadqMkt']
+        market = ['stockMkt', 'kosdaqMkt']
 
         url = 'https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType='
 
@@ -285,17 +285,20 @@ class get_data:
             'summary': 'false',
             'changeStatistics': 'true'
         }
-
-        response = requests.get(url, params=params, headers=headers)
-        quote = pd.Series(response.json())
-        return quote['tradePrice']
+        try:
+            response = requests.get(url, params=params, headers=headers)
+            quote = pd.Series(response.json())
+            return quote['tradePrice']
+        except:
+            print("jason decode error")
+            return  None
 
 
 if __name__ == '__main__':
-    gd = get_data("C:/stock")
+    gd = get_data("c:/stock")
     # df_list = gd.get_stock_list()
     # df_list.to_excel("stockList.xlsx", index=False)
     # gd.get_day_candle()
     # gd.get_minute_candle()
     # gd.get_fundamental()
-    gd.get_current_price("005930")
+    print(gd.get_current_price("005930"))

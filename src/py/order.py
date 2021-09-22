@@ -5,12 +5,11 @@ import datetime
 import time
 from write_db import Write_db
 
-
 class Order(Write_db):
     def __init__(self):
-        self.columns = ['tid', 'code', 'name', 'id', 'qty', 'cum_qty', 'buy_price', 'buy_datetime', 'sell_price',
-                        'sell_datetime', 'stop_price', 'due_date', 'profit', 'trade', 'state', 'algorithm']
-        self.hogaTypeTable = {"지정가": "00", "시장가": "03"}
+        self.columns = ['tid', 'code', 'name', 'id', 'qty', 'cum_qty', 'buy_price', 'buy_datetime', 'sell_price', 'sell_datetime', 'stop_price', 'due_date', 'profit', 'trade', 'state', 'algorithm', 'fee', 'tax']
+
+
 
     @staticmethod
     def roundTime(dt=None, roundTo=60, round='up'):
@@ -34,7 +33,7 @@ class Order(Write_db):
             return int(((buy_price + n - 1) // n) * n)
 
         df_list = pd.read_excel("stockList.xlsx")
-        df_list['종목코드'] = df_list['종목코드'].astype(str).zfill(6)
+        df_list['종목코드'] = df_list['종목코드'].astype(str).str.zfill(6)
         df_list.set_index('종목코드', drop=True, inplace=True)
 
         for idx in df.index:
@@ -42,48 +41,48 @@ class Order(Write_db):
                 buy_price = int(df.loc[idx, side])
                 if buy_price < 1000:
                     continue
-
                 code = df.loc[idx, 'code']
-                if code not in df_list.index:
-                    continue
-
-                market = df.loc[code, "종목"]
-                if market == "코스피":
-                    if buy_price < 5000:
-                        df.loc[idx, side] = get_hoga(buy_price, 5)
-                    elif buy_price < 10000:
-                        df.loc[idx, side] = get_hoga(buy_price, 10)
-                    elif buy_price < 50000:
-                        df.loc[idx, side] = get_hoga(buy_price, 50)
-                    elif buy_price < 100000:
-                        df.loc[idx, side] = get_hoga(buy_price, 100)
-                    elif buy_price < 500000:
-                        df.loc[idx, side] = get_hoga(buy_price, 500)
+                if code:
+                    market = df_list.loc[code, 'market']
+                    if market == "코스피":
+                        if buy_price < 5000:
+                            df.loc[idx, side] = get_hoga(buy_price, 5)
+                        elif buy_price < 10000:
+                            df.loc[idx, side] = get_hoga(buy_price, 10)
+                        elif buy_price < 50000:
+                            df.loc[idx, side] = get_hoga(buy_price, 50)
+                        elif buy_price < 100000:
+                            df.loc[idx, side] = get_hoga(buy_price, 100)
+                        elif buy_price < 500000:
+                            df.loc[idx, side] = get_hoga(buy_price, 500)
+                        else:
+                            df.loc[idx, side] = get_hoga(buy_price, 1000)
                     else:
-                        df.loc[idx, side] = get_hoga(buy_price, 1000)
-                else:
-                    if buy_price < 5000:
-                        df.loc[idx, side] = get_hoga(buy_price, 5)
-                    elif buy_price < 10000:
-                        df.loc[idx, side] = get_hoga(buy_price, 10)
-                    else:
-                        df.loc[idx, side] = get_hoga(buy_price, 50)
+                        if buy_price < 5000:
+                            df.loc[idx, side] = get_hoga(buy_price, 5)
+                        elif buy_price < 10000:
+                            df.loc[idx, side] = get_hoga(buy_price, 10)
+                        else:
+                            df.loc[idx, side] = get_hoga(buy_price, 50)
         return df
 
     def buy_order(self, df_buy_list):
+        self.hogaTypeTable = {"지정가": "00", "시장가": "03"}
+
         print("buy_order starts...")
         con = sqlite3.connect(os.path.join(self.__dict__['user_param']['path']['root'], 'database', 'order.db'))
 
         df_buy_list = self.set_hoga_price(df_buy_list)
         for idx in df_buy_list.index:
             code = df_buy_list.loc[idx, 'code']
-            qty = df_buy_list.loc[idx, 'qty']
-            buy_price = df_buy_list.loc[idx, 'buy_price']
-            sell_price = df_buy_list.loc[idx, 'sell_price']
-            stop_price = df_buy_list.loc[idx, 'stop_price']
+            qty = int(df_buy_list.loc[idx, 'qty'])
+            buy_price = int(df_buy_list.loc[idx, 'buy_price'])
+            sell_price = int(df_buy_list.loc[idx, 'sell_price'])
+            stop_price = int(df_buy_list.loc[idx, 'stop_price'])
             algorithm = df_buy_list.loc[idx, 'algorithm']
-            due_date = df_buy_list.loc[idx, 'due_date']
-
+            due_date = str(df_buy_list.loc[idx, 'due_date'])
+            fee = 0
+            tax = 0
             account = self.__dict__['kiwoom'].account
             if buy_price == 0:
                 hoga = self.hogaTypeTable["시장가"]
@@ -91,40 +90,46 @@ class Order(Write_db):
                 hoga = self.hogaTypeTable["지정가"]
             self.__dict__['kiwoom'].sendOrder("자동매수주문", "0101", account, 1, code, qty, buy_price, hoga, "")
             orderNo = self.__dict__['kiwoom'].orderNo
-
             if orderNo:
                 buy_datetime = str(datetime.datetime.now().replace(microsecond=0))
                 name = self.__dict__['kiwoom'].getMasterCodeName(code)
-                tid = code + "_" + algorithm
-                order_list = [tid, code, name, orderNo, qty, 0, buy_price, buy_datetime, sell_price, None,
-                               stop_price, due_date, 0, 'buy', 'yet', algorithm]
+                tid = code + "_" + orderNo + "_" + algorithm
+                order_list = [tid, code, name, orderNo, qty, 0, buy_price, buy_datetime, sell_price,    None, stop_price, due_date, 0.0, 'buy', 'yet', algorithm, fee, tax]
                 self.append_db(con, "order_list", order_list)
                 self.__dict__['kiwoom'].orderNo = ""
                 print("[{}] order is done".format(code))
             time.sleep(0.3)
         print("buy_order ends...")
+        # self.finish()
+
 
     def sell_order(self, tid, orderType="지정가"):
-        print("buy_order starts...")
+        self.hogaTypeTable = {"지정가": "00", "시장가": "03"}
+
+        print("sell_order starts...")
         con = sqlite3.connect(os.path.join(self.__dict__['user_param']['path']['root'], 'database', 'order.db'))
+        df_sell = pd.read_sql("SELECT * FROM 'hold_list' WHERE tid='{}'".format(tid), con)
+        for idx in df_sell.index:
+            code = df_sell.loc[idx, 'code']
+            qty = df_sell.loc[idx, 'qty'].astype(int)
+            cum_qty = df_sell.loc[idx, 'qty'].astype(int)
 
-        df_sell = pd.read_sql("SELECT * FROM 'hold_list' WHERE tid='{}'".format(tid), con, index_col='tid')
-        code = df_sell.loc[tid, 'code']
-        qty = df_sell.loc[tid, 'qty']
-        buy_price = df_sell.loc[tid, 'buy_price']
-        sell_price = df_sell.loc[tid, 'sell_price']
+            buy_price = df_sell.loc[idx, 'buy_price'].astype(int)
+            sell_price = df_sell.loc[idx, 'sell_price'].astype(int)
 
-        account = self.__dict__['kiwoom'].account
-        hoga = self.hogaTypeTable[orderType]
-        self.__dict__['kiwoom'].sendOrder("자동매도주문", "0101", account, 1, code, qty, sell_price, hoga, "")
-        orderNo = self.__dict__['kiwoom'].orderNo
+            fee = 0
+            tax = 0.0
+            account = self.__dict__['kiwoom'].account
+            hoga = self.hogaTypeTable[orderType]
+            self.__dict__['kiwoom'].sendOrder("자동매도주문", "0101", account, 2, code, int(cum_qty), int(sell_price), hoga, "")
+            orderNo = self.__dict__['kiwoom'].orderNo
+            if orderNo:
+                sell_datetime = str(datetime.datetime.now().replace(microsecond=0))
+                order_list = {"id": orderNo, "sell_price": sell_price, "sell_datetime": sell_datetime, "trade": "sell", "state": "yet", "fee": fee, "tax": tax}
+                self.update_db(con,  tid, "hold_list", order_list)
+                self.__dict__['kiwoom'].orderNo = ""
+                print("[{}] order is done".format(code))
 
-        if orderNo:
-            sell_datetime = str(datetime.datetime.now().replace(microsecond=0))
-            order_list = {"id": orderNo, "sell_price": sell_price, "sell_datetime": sell_datetime, "trade": "sell", "state": "yet"}
-            self.update_db(con, "hold_list", order_list)
-            self.__dict__['kiwoom'].orderNo = ""
-            print("[{}] order is done".format(code))
-
-        time.sleep(0.3)
-        print("buy_order ends...")
+            self.finish()
+            time.sleep(0.3)
+            print("sell_order ends...")

@@ -60,7 +60,7 @@ class MyWindow(QMainWindow, ui, Order):
 
         # 자동 선정 종목 리스트 테이블 설정
         self.setAutomatedStocks()
-        self.set_condition() #update
+        self.set_condition()
 
     def timeout(self):
         """ 타임아웃 이벤트가 발생하면 호출되는 메서드 """
@@ -142,8 +142,7 @@ class MyWindow(QMainWindow, ui, Order):
     def inquiryBalance(self):
         """ 예수금상세현황과 계좌평가잔고내역을 요청후 테이블에 출력한다. """
 
-     #   self.inquiryTimer.stop()
-
+        self.inquiryTimer.stop()
         try:
             # 예수금상세현황요청
             self.kiwoom.setInputValue("계좌번호", self.kiwoom.account)
@@ -159,7 +158,7 @@ class MyWindow(QMainWindow, ui, Order):
             print('Critical ' + str(e) )
             return
         time.sleep(0.3)
-        
+
         # accountEvaluationTable 테이블에 정보 출력
         item = QTableWidgetItem(self.kiwoom.opw00001Data)   # d+2추정예수금
         item.setTextAlignment(Qt.AlignVCenter | Qt.AlignRight)
@@ -313,24 +312,36 @@ class MyWindow(QMainWindow, ui, Order):
             return json.load(json_file)
 
     def get_condition(self, idx):
-        return self.kiwoom.sendCondition("0101",idx,self.cb_index[idx],0)
-    
+        return self.kiwoom.sendCondition("0101", idx, self.cb_index[idx], 0)
+
     def set_condition(self):
         self.kiwoom.getConditionLoad()
         self.conditionDictionary = self.kiwoom.getConditionNameList()
         self.accountComboBox.addItems(list(self.conditionDictionary.values()))
         self.cb_index = {y: x for x, y in self.conditionDictionary.items()}
-        
+
     def get_day_candle(self, codeList):
         data = {}
         n = len(codeList)
         for i, code in enumerate(codeList):
-            time.sleep(0.3)
+            time.sleep(0.5)
             print("{} / {}".format(i + 1, n))
-            df = self.kiwoom.req_day_data(code, repeat=60)
-            if df is None or df.empty:
-                continue
-
+            df = self.kiwoom.req_day_data(code)
+            # if df is None or df.empty:
+            #     continue
+            df = pd.concat(df)
+            df = df.set_index("Date").sort_index().astype(int)
+            data[code] = df
+        return data
+    def get_intra_data(self, codeList, period):
+        data = {}
+        n = len(codeList)
+        for i, code in enumerate(codeList):
+            time.sleep(0.5)
+            print("{} / {}".format(i + 1, n))
+            df = self.kiwoom.req_minute_data(code, period)
+            # if df is None or df.empty:
+            #     continue
             df = pd.concat(df)
             df = df.set_index("Date").sort_index().astype(int)
             data[code] = df

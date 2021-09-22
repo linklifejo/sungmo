@@ -4,7 +4,6 @@ class Write_db:
         cursor = con.cursor()
         sql = "INSERT INTO '{}'".format(tname) + 'VALUES(' + ','.join(['?'] * len(items)) + ')'
         print(sql)
-
         cursor.execute(sql, items)
         con.commit()
         self.__dict__['cond'].notify()
@@ -14,18 +13,17 @@ class Write_db:
         self.__dict__['cond'].acquire()
         cursor = con.cursor()
         sql = "DELETE FROM '{}' WHERE tid=?".format(tname)
-        print(sql)
-
         cursor.execute(sql, (tid, ))
+        print(sql)
         con.commit()
+
         self.__dict__['cond'].notify()
         self.__dict__['cond'].release()
 
-    def update_db(self, con, tname, tid, **kwargs):
+    def update_db(self, con, tid, tname, kwargs):
         self.__dict__['cond'].acquire()
         cursor = con.cursor()
-        sql = "UPDATE SET '{}'".format(tname)
-
+        sql = "UPDATE '{}' SET ".format(tname)
         keys = []
         values = []
         for key, value in kwargs.items():
@@ -34,10 +32,9 @@ class Write_db:
 
         key = ','.join(keys)
         sql += key + "WHERE tid=?"
-        print(sql)
         values.append(tid)
-
-        cursor.execute(sql, values)
+        print(sql)
+        cursor.execute(sql, (values))
         con.commit()
         self.__dict__['cond'].notify()
         self.__dict__['cond'].release()

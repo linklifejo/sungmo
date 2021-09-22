@@ -3,6 +3,14 @@
     "python.linting.flake8Enabled":true,
     "python.linting.enabled":true,
     "python.formatting.provider":"black",
-    "python.linting.flake8Args":["--max-line-length=88"]
-    
+    "python.linting.flake8Args": [
+        "--max-line-length=88"
+    ],
+    "C_Cpp.errorSquiggles": "Disabled",
+    "AREPL.customCSS": "",
+}
+{
+    "python.pythonPath": "c:\\anaconda3\\envs\\cho\\python.exe",
+    "terminal.integrated.shellArgs.windows": ["/K", "c:\\anaconda3\\Scripts\\activate.bat c:\\anaconda3& conda activate cho"],
+    "terminal.integrated.shell.windows": "c:\\windows\\system32\\cmd.exe"
 }

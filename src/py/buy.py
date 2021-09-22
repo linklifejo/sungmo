@@ -11,11 +11,12 @@ class Buy(Thread, MyWindow):
     tx_signal = pyqtSignal(str)
     rx_signal = pyqtSignal(str)
 
-    def __init__(self, user_param, cond):           
+    def __init__(self, user_param, cond):
         Thread.__init__(self)
         MyWindow.__init__(self, user_param, cond)
 
         self.user_param = user_param
+        self.cond = cond
         self.rx_signal.connect(self.exec_order)
 
     def exec_order(self, command):
@@ -37,37 +38,42 @@ class Buy(Thread, MyWindow):
 
     def daytrade(self):
         print("daytrade")
+
         try:
-            codeList=self.get_condition('short5')
+            codeList = self.get_condition('start9')
         except:
-            command=';'.join([self.__class__.__name__,'Sell','done'])
+            command = ';'.join([self.__class__.__name__, 'Sell', 'done'])
             self.tx_signal.emit(command)
             return
-        print(codeList)
-        data_day=self.get_day_candle(codeList)
-        data_intra=self.get_intra_data(codeList)
+        if codeList:
+            # data_day = self.get_day_candle(codeList)
+            data_intra = self.get_intra_data(codeList, "1")
 
-        self.inquiryBalance()
+            self.inquiryBalance()
 
-        balance = self.kiwoom.getBalance()
-        if balance <= 0:
-            print("not enough money to buy")
-            command=';'.join([self.__class__.__name__,'Sell','done'])
-            self.tx_signal.emit(command)
-            return
+            balance = self.kiwoom.getBalance()
+            if balance <= 0:
+                print("not enough money to buy")
+                command = ';'.join([self.__class__.__name__, 'Sell', 'done'])
+                self.tx_signal.emit(command)
+                return
 
-        n=len(codeList)
-        betting_money = balance / n
-        buy_list=[]
-        for code in codeList:
-            current_price = data_intra[code]['Close'].iloc[-1]
-            sell_price = int(current_price * 1.1)
-            stop_price = int(current_price * 0.5)
-            qty = int(betting_money / current_price)
-            due_date = datetime.datetime(today.year,today.month,today.day,15,0,0)
-            buy_list.append([code, qty,0,current_price,sell_price,stop_price,due_date,'daytrade'])
-            df_buy_list = pd.DateFrame(data=buy_list, columns=['code','qty','buy_price','sell_price','stop_price','due_date','algorithm'])
-        self.buy_order(df_buy_list)
+            n = len(codeList)
+            betting_money = balance / n
+            buy_list = []
+            today = datetime.datetime.today()
+            for code in codeList:
+                current_price = data_intra[code]['Close'].iloc[-1]
+                sell_price = int(current_price * 1.03)
+                stop_price = current_price - int(current_price * 0.015)
+                qty = int(betting_money / current_price)
+                qty = 2
+                fee = 0
+                tax = 0
+                due_date = datetime.datetime(today.year, today.month, today.day, 15, 0, 0)
+                buy_list.append([code, qty, 0, sell_price, stop_price, due_date, 'daytrade', fee, tax])
+                df_buy_list = pd.DataFrame(data=buy_list, columns=['code', 'qty', 'buy_price', 'sell_price', 'stop_price', 'due_date', 'algorithm', 'fee', 'tax'])
+            self.buy_order(df_buy_list)
         print('daytrade ends...')
         self.finish()
 
@@ -81,7 +87,7 @@ class Buy(Thread, MyWindow):
         if now > close_time:
             print("market closed")
             return
-        
+
         # 조건검색식 요청
         codeList = self.get_condition(self.conditionDictionary[label])
         if len(codeList) == 0:

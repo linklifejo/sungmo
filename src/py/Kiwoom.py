@@ -14,17 +14,17 @@ import logging.config
 from PyQt5.QAxContainer import QAxWidget
 from PyQt5.QtCore import QEventLoop
 from PyQt5.QtWidgets import QApplication
-from pandas import DataFrame, read_sql, concat #update
+from pandas import DataFrame, read_sql, concat
 import datetime
 import time
 import sqlite3
 import os
 from write_db import Write_db
 
-TR_REQ_TIME_INTERVAL= 0.2 #update
+# update
+TR_REQ_TIME_INTERVAL = 0.4
 
 class Kiwoom(QAxWidget, Write_db):
-
     def __init__(self, user_param, cond):
         super().__init__()
         self.cond = cond
@@ -42,9 +42,10 @@ class Kiwoom(QAxWidget, Write_db):
 
         # 조건식
         self.condition = None
-        
-        #update
-        self.codeList=[]
+
+
+        # update
+        self.codeList = []
 
         # 에러
         self.error = None
@@ -60,9 +61,10 @@ class Kiwoom(QAxWidget, Write_db):
 
         # 예수금 d+2
         self.opw00001Data = 0
-        
+
         # 보유종목 정보
         self.opw00018Data = {'accountEvaluation': [], 'stocks': []}
+
 
         # signal & slot
         self.OnEventConnect.connect(self.eventConnect)
@@ -160,23 +162,24 @@ class Kiwoom(QAxWidget, Write_db):
         :param recordName: string
         :param inquiry: string - 조회('0': 남은 데이터 없음, '2': 남은 데이터 있음)
         """
+        if inquiry == '2':
+            self.remainedData = True
+        else:
+            self.remainedData = False
 
         print("receiveTrData 실행: ", screenNo, requestName, trCode, recordName, inquiry)
 
         # 주문번호와 주문루프
         self.orderNo = self.commGetData(trCode, "", requestName, 0, "주문번호")
-
         try:
             self.orderLoop.exit()
         except AttributeError:
             pass
 
-        self.inquiry = '0' #update
+        self.inquiry =  inquiry
 
         if requestName == "관심종목정보요청":
             data = self.getCommDataEx(trCode, "관심종목정보")
-            print(type(data))
-            print(data)
 
             """ commGetData
             cnt = self.getRepeatCnt(trCode, requestName)
@@ -198,7 +201,7 @@ class Kiwoom(QAxWidget, Write_db):
             print(data.head(5))
 
             """ commGetData
-            cnt = self.getRepeatCnt(trCode, requestName)
+            cnt = self.(trCode, requestName)
 
             for i in range(cnt):
                 date = self.commGetData(trCode, "", requestName, i, "일자")
@@ -208,10 +211,10 @@ class Kiwoom(QAxWidget, Write_db):
                 close = self.commGetData(trCode, "", requestName, i, "현재가")
                 print(date, ": ", open, ' ', high, ' ', low, ' ', close)
             """
-        #update
+        # update
         elif requestName == "예수금상세현황요청":
-            deposit = self.commGetData(trCode,"", requestName, 0, "예수금")
-         #   deposit = self.commGetData(trCode, "", requestName, 0, "d+2추정예수금") 
+            deposit = self.commGetData(trCode, "", requestName, 0, "예수금")
+        # deposit = self.commGetData(trCode, "", requestName, 0, "d+2추정예수금")
             deposit = self.changeFormat(deposit)
             self.opw00001Data = deposit
 
@@ -250,18 +253,21 @@ class Kiwoom(QAxWidget, Write_db):
                     stock.append(value)
 
                 self.opw00018Data['stocks'].append(stock)
-        #update
-        elif requestName=="주식호가":
-            self.opt10004(requestName,trCode)
-        elif requestName=="분봉데이타요청":
-            self.opt10080(requestName,trCode)
-        elif requestName=="일봉데이타요청":
-            self.opt10081(requestName,trCode)
-        elif requestName=="현재데이타요청":
-            self.opt10001(requestName,trCode)
+        # update
+
+        elif requestName == "주식호가":
+            self.opt10004(requestName, trCode)
+        elif requestName == "opt10080_req":
+            self.opt10080(requestName, trCode)
+        elif requestName == "opt10081_req":
+            self.opt10081(requestName, trCode)
+        elif requestName == "현재데이타요청":
+            self.opt10001(requestName, trCode)
 
         try:
             self.requestLoop.exit()
+            if self.orderLoop is not None:
+                self.orderLoop.exit()
         except AttributeError:
             pass
 
@@ -279,8 +285,8 @@ class Kiwoom(QAxWidget, Write_db):
         """
 
         try:
-            self.log.debug("[receiveRealData]")
-            self.log.debug("({})".format(realType))
+            # self.log.debug("[receiveRealData]")
+            # self.log.debug("({})".format(realType))
 
             if realType not in RealType.REALTYPE:
                 return
@@ -296,10 +302,8 @@ class Kiwoom(QAxWidget, Write_db):
             for fid in sorted(RealType.REALTYPE[realType].keys()):
                 value = self.getCommRealData(codeOrNot, fid)
                 data.append(value)
-
             # TODO: DB에 저장
-            self.log.debug(data)
-
+            # self.log.debug(data)
         except Exception as e:
             self.log.error('{}'.format(e))
 
@@ -322,7 +326,7 @@ class Kiwoom(QAxWidget, Write_db):
         code = self.getChejanData(9001)[1:]
         order_type = self.getChejanData(905)
         qty = self.getChejanData(900)
-        remain_qty = self.getChejanData(902)
+        remain_qty = int(self.getChejanData(902))
         cum_price = self.getChejanData(903)
         fee = self.getChejanData(938)
         tax = self.getChejanData(939)
@@ -330,39 +334,46 @@ class Kiwoom(QAxWidget, Write_db):
         if remain_qty > 0 or cum_price == 0:
             return
 
-        price = int(cum_price / qty)
-        if order_type == "매수":
+        price = int(cum_price) / int(qty)
+        if order_type == "+매수":
+            print('매수')
             self.update_hold_list(code, remain_qty, price, order_num, fee)
         else:
-            self.update_trade_history(code, order_num, qty, price, fee, tax)
+            self.update_order_history(code, order_num, qty, price, fee, tax)
+
+        if self.orderLoop is not None:
+            self.orderLoop.exit()
 
     def update_hold_list(self, code, remain_qty, buy_price, order_num, fee):
-        df = read_sql("SELECT * FROM 'order_list' WHERE code='{}'".format(code), self.con, index_col='tid')
-        tid = df[df['id'] == order_num].index[0]
-        df.loc[tid, "cum_qty"] = int(df.loc[tid, 'qty']) - int(remain_qty)
-        df.loc[tid, "state"] = "bought"
-        df.loc[tid, "buy_price"] = int(buy_price)
-        df.loc[tid, "name"] = self.getMasterCodeName(code)
-        df.loc[tid, "fee"] = fee
-        df.loc[tid, "tax"] = 0
-        df.loc[tid, "buy_datetime"] = str(datetime.datetime.now().replace(microsecond=0))
-        items = [tid, *df.loc[tid].astype(str).values]
-        self.move_db(self.con, "order_list", "hold_list", tid, items)
+        df = read_sql("SELECT * FROM 'order_list' WHERE code='{}' AND id='{}' ".format(code, order_num), self.con)
+        # tid = df[df['id'] == order_num].index
+        for tid in df.index:
+            df.loc[tid, "cum_qty"] = df.loc[tid, 'qty'].astype(int) - int(remain_qty)
+            df.loc[tid, "state"] = "bought"
+            df.loc[tid, "buy_price"] = int(buy_price)
+            df.loc[tid, "name"] = self.getMasterCodeName(code)
+            df.loc[tid, "fee"] = fee
+            df.loc[tid, "tax"] = 0
+            df.loc[tid, "buy_datetime"] = str(datetime.datetime.now().replace(microsecond=0))
+            df.loc[tid, "tid"] = df.loc[tid, "tid"]
+            items = list(df.loc[tid].astype(str).values)
+            tid = df.loc[tid, "tid"]
+            self.move_db(self.con, "order_list", "hold_list", tid, items)
 
     def update_order_history(self, code, order_num, qty, price, fee, tax):
-        df = read_sql("SELECT * FROM 'order_list' WHERE code='{}'".format(code), self.con, index_col='tid')
-        tid = df[df['id'] == order_num].index[0]
-        df.loc[tid, "state"] = "sold"
-        df.loc[tid, "sell_price"] = price
-        df.loc[tid, "fee"] += fee
-        df.loc[tid, "tax"] = tax
-        df.loc[tid, "sell_datetime"] = str(datetime.datetime.now().replace(microsecond=0))
-        buy_price = int(df.loc[tid, "buy_price"])
-        df.loc[tid, 'profit'] = (price - buy_price) * qty - df.loc[tid, 'fee'] - tax
-
-        items = list(df.loc[tid].astype(str).values)
-        self.move_db(self.con, 'hold_list', 'order_history', tid, items)
-
+        df = read_sql("SELECT * FROM 'hold_list' WHERE code='{}'AND id='{}'".format(code, order_num), self.con)
+        # tid = df[df['id'] == order_num].index
+        for tid in df.index:
+            df.loc[tid, "state"] = "sold"
+            df.loc[tid, "sell_price"] = int(price)
+            df.loc[tid, "fee"] += int(fee)
+            df.loc[tid, "tax"] = int(tax)
+            df.loc[tid, "sell_datetime"] = str(datetime.datetime.now().replace(microsecond=0))
+            buy_price = df.loc[tid, "buy_price"].astype(int)
+            df.loc[tid, 'profit'] = (int(price) - int(buy_price)) * int(qty) - int(fee) - int(tax)
+            items = list(df.loc[tid].astype(str).values)
+            tid = df.loc[tid, "tid"]
+            self.move_db(self.con, 'hold_list', 'order_history', tid, items)
     ###############################################################
     # 메서드 정의: 로그인 관련 메서드                                    #
     ###############################################################
@@ -481,7 +492,6 @@ class Kiwoom(QAxWidget, Write_db):
 
         if returnCode != ReturnCode.OP_ERR_NONE:
             raise KiwoomProcessingError("commRqData(): " + ReturnCode.CAUSE[returnCode])
-
         # 루프 생성: receiveTrData() 메서드에서 루프를 종료시킨다.
         self.requestLoop = QEventLoop()
         self.requestLoop.exec_()
@@ -754,7 +764,7 @@ class Kiwoom(QAxWidget, Write_db):
             if codes == "":
                 return
 
-            self.codeList = codes.split(';')[:-1] #update
+            self.codeList = codes.split(';')[:-1]
             print(self.codeList)
             print("종목개수: ", len(self.codeList))
 
@@ -854,8 +864,8 @@ class Kiwoom(QAxWidget, Write_db):
         # receiveTrCondition() 이벤트 메서드에서 루프 종료
         self.conditionLoop = QEventLoop()
         self.conditionLoop.exec_()
-        return self.codeList    #update
-    
+        return self.codeList
+
     def sendConditionStop(self, screenNo, conditionName, conditionIndex):
         """ 종목 조건검색 중지 메서드 """
 
@@ -910,10 +920,8 @@ class Kiwoom(QAxWidget, Write_db):
                 and isinstance(originOrderNo, str)):
 
             raise ParameterTypeError()
-
         returnCode = self.dynamicCall("SendOrder(QString, QString, QString, int, QString, int, int, QString, QString)",
                                       [requestName, screenNo, accountNo, orderType, code, qty, price, hogaType, originOrderNo])
-
         if returnCode != ReturnCode.OP_ERR_NONE:
             raise KiwoomProcessingError("sendOrder(): " + ReturnCode.CAUSE[returnCode])
 
@@ -968,6 +976,7 @@ class Kiwoom(QAxWidget, Write_db):
 
     def getCodeList(self, *market):
         """
+        
         여러 시장의 종목코드를 List 형태로 반환하는 헬퍼 메서드.
 
         :param market: Tuple - 여러 개의 문자열을 매개변수로 받아 Tuple로 처리한다.
@@ -1029,103 +1038,115 @@ class Kiwoom(QAxWidget, Write_db):
 
     def setAccount(self):
         self.account = self.getAccount()
-    #update
+
     # 현금 조회
     def getBalance(self):
         self.setInputValue("계좌번호", self.account)
         self.setInputValue("비밀번호", self.user_param['password'])
-        self.commRqData("예수금상세현황요청", "opw00001", 0, "0101")
+        self.commRqData("예수금상세현황요청", "opw00018", 0, "0101")
         if len(self.opw00018Data["accountEvaluation"]) < 2:
             return -1
-        
+        # self.commRqData("예수금상세현황요청", "opw00018", 0, "0101")
         equity = self.opw00018Data["accountEvaluation"][-1].replace(',', '')
         stocks = self.opw00018Data["accountEvaluation"][1].replace(',', '')
-        
         return int(equity) - int(stocks)
-    #update
-    # 일봉 데이터 다운
-    def req_day_data(self, code, repeat=60):
-        self.repeat = repeat
+
+    def opt10081(self, rqname, trcode):
+        dataList = []
+        cnt = self.getRepeatCnt(trcode, rqname)
+        for i in range(cnt):
+            date = self.commGetData(trcode, "", rqname, i, "일자")
+            if not date:
+                continue
+
+            day = self.to_date(date)
+            open = self.commGetData(trcode, "", rqname, i, "시가")
+            low = self.commGetData(trcode, "", rqname, i, "저가")
+            high = self.commGetData(trcode, "", rqname, i, "고가")
+            close = self.commGetData(trcode, "", rqname, i, "현재가")
+            volume = self.commGetData(trcode, "", rqname, i, "거래량")
+            dataList.append([day, open, low, high, close, int(volume)])
+        df = DataFrame(data=dataList, columns=['Date', 'Open', 'Low', 'High', 'Close', 'Volume'])
+        df = df.sort_index()
+        self.dfs.append(df)
+
+    # 일봉 `데이터 다운
+    def req_day_data(self, code):
         self.dfs = []
         date = str(datetime.date.today()).replace('-', '')
         self.setInputValue("종목코드", code)
         self.setInputValue("기준일자", date)
         self.setInputValue("수정주가구분", "1")
-        self.commRqData("일봉데이터요청", "opt10081", 0, "0101")
-        return concat(self.dfs)
-    
-    def req_minute_data(self,code,period,repeat=1):
+        self.commRqData("opt10081_req", "opt10081", 0, "0101")
+        time.sleep(TR_REQ_TIME_INTERVAL)
+
+        # while self.remainedData == True:
+        #     time.sleep(TR_REQ_TIME_INTERVAL)
+        #     self.setInputValue("종목코드", code)
+        #     self.setInputValue("기준일자", date)
+        #     self.setInputValue("수정주가구분", "1")
+        #     self.commRqData("opt10081_req", "opt10081", 2, "0101")
+        return self.dfs
+
+    def req_minute_data(self, code, period):
         self.dfs = []
         self.setInputValue("종목코드", code)
         self.setInputValue("틱범위", period)
         self.setInputValue("수정주가구분", "0")
-        self.commRqData("분봉데이터요청", "opt10080", 0, "0101")
-        for i in range(repeat):
-            time.sleep(TR_REQ_TIME_INTERVAL)
-            self.setInputValue("종목코드", code)
-            self.setInputValue("틱범위", period)
-            self.setInputValue("수정주가구분", "0")
-            self.commRqData("분봉데이터요청", "opt10080", 2, "0101")
-        return concat(self.dfs)
-        
-    def opt10080(self,rqname,trcode):
-        dataList = []        
-        for i in range(self.repeat):
+        self.commRqData("opt10080_req", "opt10080", 0, "0101")
+        time.sleep(TR_REQ_TIME_INTERVAL)
+
+        # while self.remainedData == True:
+        #     time.sleep(TR_REQ_TIME_INTERVAL)
+        #     self.setInputValue("종목코드", code)
+        #     self.setInputValue("틱범위", period)
+        #     self.setInputValue("수정주가구분", "0")
+        #     self.commRqData("opt10080_req", "opt10080", 2, "0101")
+        return self.dfs
+
+    def opt10080(self, rqname, trcode):
+        dataList = []
+        cnt = self.getRepeatCnt(trcode, rqname)
+
+        for i in range(cnt):
             try:
-                day= self.to_datetime(self.commGetData(trcode,"",rqname,i,"체결시간"))
+                day = self.to_datetime(self.commGetData(trcode, "", rqname, i, "체결시간"))
             except:
-                df = DataFrame(data=dataList,columns=['Date','Open','High','Low','Close','Volume'])
+                df = DataFrame(data=dataList, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])
                 self.dfs.append(df)
                 return
 
-            open = self.commGetData(trcode,"",rqname,1,"시가")
-            low = self.commGetData(trcode,"",rqname,1,"저가")
-            high = self.commGetData(trcode,"",rqname,1,"고가")
-            close = self.commGetData(trcode,"",rqname,1,"현재가")
-            volume = self.commGetData(trcode,"",rqname,1,"거래량")
-            if open[0]=='-':
+            open = self.commGetData(trcode, "", rqname, i, "시가")
+            low = self.commGetData(trcode, "", rqname, i, "저가")
+            high = self.commGetData(trcode, "", rqname, i, "고가")
+            close = self.commGetData(trcode, "", rqname, i, "현재가")
+            volume = self.commGetData(trcode, "", rqname, i, "거래량")
+
+            if open[0] == '-':
                 open = open[1:]
-            if high[0]=='-':
+            if high[0] == '-':
                 high = high[1:]
-            if low[0]=='-':
+            if low[0] == '-':
                 low = low[1:]
-            if close[0]=='-':
+            if close[0] == '-':
                 close = close[1:]
-
-            dataList.append([day, int(open),int(high),int(low),int(close),int(volume)])
-        df = DateFrame(data=dataList,columns=['Date','Open','High','Low','Close','Vloume'])
+            dataList.append([day, open, low, high, close, int(volume)])
+        df = DataFrame(data=dataList, columns=['Date', 'Open', 'Low', 'High', 'Close', 'Volume'])
         self.dfs.append(df)
 
-    def to_datetime(self,day):
-        return datetime.datetime(int(day[:4]),int(day[4:6]),int(day[6:8]),int(day[8:10]),int(day[10:12]),int(day[12:14]))
-    
-    def to_date(self,day):
-        return datetime.datetime(int(day[:4]),int(day[4:6]),int(day[6:8])).date()
-        
-    def opt10081(self,rqname,trcode):
-        dataList = []        
-        for i in range(self.repeat):
-            date = self.commGetData(trcode,"",rqname,1,"일자")
-            if not date:
-                continue
+    def to_datetime(self, day):
+        return datetime.datetime(int(day[:4]), int(day[4:6]), int(day[6:8]), int(day[8:10]), int(day[10:12]), int(day[12:14]))
 
-            day = self.to_date(date)
-            open = self.commGetData(trcode,"",rqname,1,"시가")
-            low = self.commGetData(trcode,"",rqname,1,"저가")
-            high = self.commGetData(trcode,"",rqname,1,"고가")
-            close = self.commGetData(trcode,"",rqname,1,"현재가")
-            volume = self.commGetData(trcode,"",rqname,1,"거래량")
+    def to_date(self, day):
+        return datetime.datetime(int(day[:4]), int(day[4:6]), int(day[6:8])).date()
 
-            dataList.append([day, open,high,low,close,int(volume)])
-        df = DateFrame(data=dataList,columns=['Date','Open','High','Low','Close','Volume'])
-        df = df.sort_index()
-        self.dfs.append(df)
-                
+
 class ParameterTypeError(Exception):
     """ 파라미터 타입이 일치하지 않을 경우 발생하는 예외 """
 
     def __init__(self, msg="파라미터로 사용할 수 없는 값 입니다."):
         self.msg = msg
+
 class ParameterTypeError(Exception):
     """ 파라미터 타입이 일치하지 않을 경우 발생하는 예외 """
 

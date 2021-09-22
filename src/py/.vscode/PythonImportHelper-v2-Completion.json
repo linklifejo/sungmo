@@ -66,6 +66,14 @@
         "documentation": {}
     },
     {
+        "label": "*",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
         "label": "QApplication",
         "importPath": "PyQt5.QtWidgets",
         "description": "PyQt5.QtWidgets",
@@ -122,6 +130,14 @@
         "documentation": {}
     },
     {
+        "label": "QApplication",
+        "importPath": "PyQt5.QtWidgets",
+        "description": "PyQt5.QtWidgets",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtWidgets",
+        "documentation": {}
+    },
+    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -147,7 +163,23 @@
         "documentation": {}
     },
     {
+        "label": "Condition",
+        "importPath": "threading",
+        "description": "threading",
+        "isExtraImport": true,
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
         "label": "pyqtSignal",
+        "importPath": "PyQt5.QtCore",
+        "description": "PyQt5.QtCore",
+        "isExtraImport": true,
+        "detail": "PyQt5.QtCore",
+        "documentation": {}
+    },
+    {
+        "label": "*",
         "importPath": "PyQt5.QtCore",
         "description": "PyQt5.QtCore",
         "isExtraImport": true,
@@ -211,6 +243,31 @@
         "documentation": {}
     },
     {
+        "label": "*",
+        "importPath": "PyQt5.QAxContainer",
+        "description": "PyQt5.QAxContainer",
+        "isExtraImport": true,
+        "detail": "PyQt5.QAxContainer",
+        "documentation": {}
+    },
+    {
+        "label": "QAxWidget",
+        "importPath": "PyQt5.QAxContainer",
+        "description": "PyQt5.QAxContainer",
+        "isExtraImport": true,
+        "detail": "PyQt5.QAxContainer",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "sqlite3",
         "kind": 6,
         "isExtraImport": true,
@@ -259,15 +316,6 @@
         "description": "dateutil.relativedelta",
         "isExtraImport": true,
         "detail": "dateutil.relativedelta",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -322,14 +370,6 @@
         "documentation": {}
     },
     {
-        "label": "QAxWidget",
-        "importPath": "PyQt5.QAxContainer",
-        "description": "PyQt5.QAxContainer",
-        "isExtraImport": true,
-        "detail": "PyQt5.QAxContainer",
-        "documentation": {}
-    },
-    {
         "label": "Write_db",
         "importPath": "write_db",
         "description": "write_db",
@@ -367,6 +407,22 @@
         "description": "sell",
         "isExtraImport": true,
         "detail": "sell",
+        "documentation": {}
+    },
+    {
+        "label": "Sell",
+        "importPath": "sell",
+        "description": "sell",
+        "isExtraImport": true,
+        "detail": "sell",
+        "documentation": {}
+    },
+    {
+        "label": "Buy",
+        "importPath": "buy",
+        "description": "buy",
+        "isExtraImport": true,
+        "detail": "buy",
         "documentation": {}
     },
     {
@@ -481,8 +537,26 @@
         "kind": 6,
         "importPath": "buy",
         "description": "buy",
-        "peekOfCode": "class Buy(Thread, MyWindow):\n    tx_signal = pyqtSignal(str)\n    rx_signal = pyqtSignal(str)\n    def __init__(self, user_param, cond):           \n        Thread.__init__(self)\n        MyWindow.__init__(self, user_param, cond)\n        self.user_param = user_param\n        self.rx_signal.connect(self.exec_order)\n    def exec_order(self, command):\n        if ',' in command:",
+        "peekOfCode": "class Buy(Thread, MyWindow):\n    tx_signal = pyqtSignal(str)\n    rx_signal = pyqtSignal(str)\n    def __init__(self, user_param, cond):\n        Thread.__init__(self)\n        MyWindow.__init__(self, user_param, cond)\n        self.user_param = user_param\n        self.cond = cond\n        self.rx_signal.connect(self.exec_order)\n    def exec_order(self, command):",
         "detail": "buy",
+        "documentation": {}
+    },
+    {
+        "label": "Kiwoom",
+        "kind": 6,
+        "importPath": "codeget",
+        "description": "codeget",
+        "peekOfCode": "class Kiwoom(QAxWidget):\n    def __init__(self):\n        super().__init__()\n        self._create_kiwoom_instance()\n        self._set_signal_slots()\n    def _create_kiwoom_instance(self):\n        self.setControl(\"KHOPENAPI.KHOpenAPICtrl.1\")\n    def _set_signal_slots(self):\n        self.OnEventConnect.connect(self._event_connect)\n    def comm_connect(self):",
+        "detail": "codeget",
+        "documentation": {}
+    },
+    {
+        "label": "TR_REQ_TIME_INTERVAL",
+        "kind": 5,
+        "importPath": "codeget",
+        "description": "codeget",
+        "peekOfCode": "TR_REQ_TIME_INTERVAL = 0.2\nclass Kiwoom(QAxWidget):\n    def __init__(self):\n        super().__init__()\n        self._create_kiwoom_instance()\n        self._set_signal_slots()\n    def _create_kiwoom_instance(self):\n        self.setControl(\"KHOPENAPI.KHOpenAPICtrl.1\")\n    def _set_signal_slots(self):\n        self.OnEventConnect.connect(self._event_connect)",
+        "detail": "codeget",
         "documentation": {}
     },
     {
@@ -499,7 +573,7 @@
         "kind": 6,
         "importPath": "get_data",
         "description": "get_data",
-        "peekOfCode": "class get_data:\n    def __init__(self, root):\n        self.root = root\n    def get_stock_list(self):\n        market = ['stockMkt', 'kosadqMkt']\n        url = 'https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType='\n        dfs = []\n        for m in market:\n            df = pd.read_html(url + m, header=0)[0]\n            if m == 'stockMkt':",
+        "peekOfCode": "class get_data:\n    def __init__(self, root):\n        self.root = root\n    def get_stock_list(self):\n        market = ['stockMkt', 'kosdaqMkt']\n        url = 'https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType='\n        dfs = []\n        for m in market:\n            df = pd.read_html(url + m, header=0)[0]\n            if m == 'stockMkt':",
         "detail": "get_data",
         "documentation": {}
     },
@@ -581,6 +655,15 @@
         "importPath": "Kiwoom",
         "description": "Kiwoom",
         "peekOfCode": "class RealType(object):\n    REALTYPE = {\n        '주식시세': {\n            10: '현재가',\n            11: '전일대비',\n            12: '등락율',\n            27: '최우선매도호가',\n            28: '최우선매수호가',\n            13: '누적거래량',\n            14: '누적거래대금',",
+        "detail": "Kiwoom",
+        "documentation": {}
+    },
+    {
+        "label": "TR_REQ_TIME_INTERVAL",
+        "kind": 5,
+        "importPath": "Kiwoom",
+        "description": "Kiwoom",
+        "peekOfCode": "TR_REQ_TIME_INTERVAL = 0.4\nclass Kiwoom(QAxWidget, Write_db):\n    def __init__(self, user_param, cond):\n        super().__init__()\n        self.cond = cond\n        self.setControl(\"KHOPENAPI.KHOpenAPICtrl.1\")\n        # Loop 변수\n        # 비동기 방식으로 동작되는 이벤트를 동기화(순서대로 동작) 시킬 때\n        self.loginLoop = None\n        self.requestLoop = None",
         "detail": "Kiwoom",
         "documentation": {}
     },
@@ -670,7 +753,7 @@
         "kind": 6,
         "importPath": "order",
         "description": "order",
-        "peekOfCode": "class Order(Write_db):\n    def __init__(self):\n        self.columns = ['tid', 'code', 'name', 'id', 'qty', 'cum_qty', 'buy_price', 'buy_datetime', 'sell_price',\n                        'sell_datetime', 'stop_price', 'due_date', 'profit', 'trade', 'state', 'algorithm']\n        self.hogaTypeTable = {\"지정가\": \"00\", \"시장가\": \"03\"}\n    @staticmethod\n    def roundTime(dt=None, roundTo=60, round='up'):\n        \"\"\"Round a datetime object to any time lapse in seconds\n        dt : datetime.datetime object, default now.\n        roundTo : Closest number of seconds to round to, default 1 minute.",
+        "peekOfCode": "class Order(Write_db):\n    def __init__(self):\n        self.columns = ['tid', 'code', 'name', 'id', 'qty', 'cum_qty', 'buy_price', 'buy_datetime', 'sell_price', 'sell_datetime', 'stop_price', 'due_date', 'profit', 'trade', 'state', 'algorithm', 'fee', 'tax']\n    @staticmethod\n    def roundTime(dt=None, roundTo=60, round='up'):\n        \"\"\"Round a datetime object to any time lapse in seconds\n        dt : datetime.datetime object, default now.\n        roundTo : Closest number of seconds to round to, default 1 minute.\n        Author: Thierry Husson 2012 - Use it as you want but don't blame me.\n        \"\"\"",
         "detail": "order",
         "documentation": {}
     },
@@ -693,6 +776,33 @@
         "documentation": {}
     },
     {
+        "label": "req_day_data",
+        "kind": 2,
+        "importPath": "save",
+        "description": "save",
+        "peekOfCode": "def req_day_data(self, code, repeat=60):\n    self.repeat = repeat\n    self.dfs = []\n    date = str(datetime.date.today()).replace('-', '')\n    self.setInputValue(\"종목코드\", code)\n    self.setInputValue(\"기준일자\", date)\n    self.setInputValue(\"수정주가구분\", \"1\")\n    self.commRqData(\"일봉데이터요청\", \"opt10081\", 0, \"0101\")\n    return self.dfs\ndef req_minute_data(self, code, period, repeat=1):",
+        "detail": "save",
+        "documentation": {}
+    },
+    {
+        "label": "req_minute_data",
+        "kind": 2,
+        "importPath": "save",
+        "description": "save",
+        "peekOfCode": "def req_minute_data(self, code, period, repeat=1):\n    self.dfs = []\n    self.setInputValue(\"종목코드\", code)\n    self.setInputValue(\"틱범위\", period)\n    self.setInputValue(\"수정주가구분\", \"0\")\n    self.commRqData(\"분봉데이터요청\", \"opt10080\", 0, \"0101\")\n    for i in range(repeat):\n        time.sleep(TR_REQ_TIME_INTERVAL)\n        self.setInputValue(\"종목코드\", code)\n        self.setInputValue(\"틱범위\", period)",
+        "detail": "save",
+        "documentation": {}
+    },
+    {
+        "label": "opt10080",
+        "kind": 2,
+        "importPath": "save",
+        "description": "save",
+        "peekOfCode": "def opt10080(self, rqname, trcode):\n    dataList = []\n    for i in range(self.repeat):\n        try:\n            day = self.to_datetime(self.commGetData(trcode, \"\", rqname, i, \"체결시간\"))\n        except:\n            df = DataFrame(data=dataList, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])\n            self.dfs.append(df)\n            return\n        open = self.commGetData(trcode, \"\", rqname, i, \"시가\")",
+        "detail": "save",
+        "documentation": {}
+    },
+    {
         "label": "Sell",
         "kind": 6,
         "importPath": "sell",
@@ -708,6 +818,33 @@
         "description": "sim_ma5",
         "peekOfCode": "class sim_ma5:\n    def __init__(self, root):\n        self.root = root\n    def run(self):\n        con = sqlite3.connect(os.path.join(self.root, 'database', 'day_candle.db'))\n        db = database()\n        codeList = db.load_tableList(con)\n        result = []\n        for code in codeList:\n            df = pd.read_sql(\"SELECT * FROM '{}'\".format(code), con, index_col='Date')",
         "detail": "sim_ma5",
+        "documentation": {}
+    },
+    {
+        "label": "Main",
+        "kind": 6,
+        "importPath": "test",
+        "description": "test",
+        "peekOfCode": "class Main:\n    def __init__(self):\n        self.threads = {}\n    def load_param(self):\n        with open('parameter.join') as json_file:\n            return json.load(jason_file)\n    def connect_order(self, command):\n        from_signal, to_signal, func = command.split(';')      \n        self.threads[to_signal].rx_signal.emit(func)      \n    def run(self):",
+        "detail": "test",
+        "documentation": {}
+    },
+    {
+        "label": "x",
+        "kind": 2,
+        "importPath": "test2",
+        "description": "test2",
+        "peekOfCode": "def x(x):\n    print(x)\n    global a\n    a = 4\nx(a)\nprint(a)",
+        "detail": "test2",
+        "documentation": {}
+    },
+    {
+        "label": "a",
+        "kind": 5,
+        "importPath": "test2",
+        "description": "test2",
+        "peekOfCode": "a = 3\ndef x(x):\n    print(x)\n    global a\n    a = 4\nx(a)\nprint(a)",
+        "detail": "test2",
         "documentation": {}
     },
     {
